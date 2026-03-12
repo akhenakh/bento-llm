@@ -1,0 +1,18 @@
+input:
+  generate:
+    interval: 10s
+    mapping: |
+      root.ingredient = ["chicken", "tofu", "beef"].index(random_int() % 3)
+
+pipeline:
+  processors:
+    - llm:
+        provider: "openai-compat"
+        model: "qwen-3.5-27b"
+        base_url: "http://localhost:11434"
+        system_prompt: "You are a professional chef. Keep it short."
+        prompt: "Give me a 2 sentence recipe using ${! this.ingredient }."
+
+output:
+  stdout:
+    codec: lines
