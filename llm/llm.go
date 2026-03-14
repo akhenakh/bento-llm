@@ -69,7 +69,7 @@ func llmProcessorSpec() *service.ConfigSpec {
 				Description("The maximum duration to wait for the LLM (and any tool calls) to complete.").
 				Default("5m"),
 			service.NewObjectListField(llmFieldMCPServers,
-				service.NewStringField(mcpFieldType).Description("Type of connection: 'stdio' or 'sse'"),
+				service.NewStringField(mcpFieldType).Description("Type of connection: 'stdio', 'sse', or 'streamable'"),
 				service.NewStringField(mcpFieldCommand).Description("Command to execute for stdio transport.").Optional(),
 				service.NewStringListField(mcpFieldArgs).Description("Arguments for the command.").Optional(),
 				service.NewStringMapField(mcpFieldEnv).Description("Environment variables for the command.").Optional(),
@@ -281,13 +281,11 @@ func (p *llmProcessor) initMCP(ctx context.Context) error {
 			}
 			c = client.NewClient(t)
 			err = c.Start(ctx)
-		case "http":
-			t, errTransport := transport.NewStreamableHTTP(cfg.URL)
-			if errTransport != nil {
-				return fmt.Errorf("failed to create SSE transport for %s: %v", cfg.URL, errTransport)
+		case "streamable":
+			c, err = client.NewStreamableHttpClient(cfg.URL)
+			if err == nil {
+				err = c.Start(ctx)
 			}
-			c = client.NewClient(t)
-			err = c.Start(ctx)
 		default:
 			return fmt.Errorf("unknown MCP server type: %s", cfg.Type)
 		}
