@@ -122,7 +122,7 @@ require (
 	github.com/btnguyen2k/consu/semita v0.1.5 // indirect
 	github.com/bufbuild/protocompile v0.8.0 // indirect
 	github.com/bufbuild/prototransform v0.4.0 // indirect
-	github.com/buger/jsonparser v1.1.1 // indirect
+	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/bwmarrin/discordgo v0.27.1 // indirect
 	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
